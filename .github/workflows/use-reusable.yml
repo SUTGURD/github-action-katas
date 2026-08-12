@@ -1,18 +1,13 @@
-name: Use reusable summary
+name: Reuse other workflow
 
 on: [workflow_dispatch]
-
 jobs:
-  call-reusable:
+  call-workflow:
     uses: ./.github/workflows/reusable.yml
     with:
-      numbers: '[5, 15, 25, 35, 45]'
-
-  show-summary:
+      who-to-greet: '@sofusalbertsen'
+  use-output:
     runs-on: ubuntu-latest
-    needs: [call-reusable]
+    needs: [call-workflow]
     steps:
-      - name: Print reusable workflow outputs
-        run: |
-          echo "Reusable summary (JSON): ${{ needs.call-reusable.outputs.summary }}"
-          echo "Reusable summary (text): ${{ needs.call-reusable.outputs.summary_text }}"
+      - run: echo "Time was ${{ needs.call-workflow.outputs.current-time }}"
